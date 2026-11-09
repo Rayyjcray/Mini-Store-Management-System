@@ -8,7 +8,6 @@ import {
   Package,
   AlertTriangle,
   Wallet,
-  ShoppingBasket,
 } from 'lucide-react'
 import {
   ResponsiveContainer,
@@ -154,12 +153,6 @@ export default function Dashboard() {
           </div>
           <div className="space-y-2 p-4">
             {[
-              {
-                title: 'Open checkout',
-                text: 'Ring up a new sale',
-                icon: ShoppingBasket,
-                page: 'Point of sale' as const,
-              },
               {
                 title: 'Manage inventory',
                 text: 'Restock and track your products',

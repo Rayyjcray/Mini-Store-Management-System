@@ -81,23 +81,14 @@ export function PageTitle({
     </div>
   )
 }
-export function Empty({
-  title,
-  text,
-  action,
-}: {
-  title: string
-  text: string
-  action?: ReactNode
-}) {
+export function Empty({ title, text, icon }: { title: string; text: string; icon?: ReactNode }) {
   return (
     <div className="flex flex-col items-center justify-center px-8 py-14 text-center">
       <div className="mb-4 rounded-2xl bg-muted p-4">
-        <PackageOpen className="text-muted-foreground" size={25} />
+        {icon ?? <PackageOpen className="text-muted-foreground" size={25} />}
       </div>
       <h3 className="font-semibold">{title}</h3>
       <p className="mt-2 max-w-sm text-sm leading-relaxed text-muted-foreground">{text}</p>
-      {action && <div className="mt-5">{action}</div>}
     </div>
   )
 }

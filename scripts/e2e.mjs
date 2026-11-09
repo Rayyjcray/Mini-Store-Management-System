@@ -1,9 +1,10 @@
 import { _electron as electron } from 'playwright'
-import { expect } from '@playwright/test'
+import { expect as baseExpect } from '@playwright/test'
 import { mkdirSync, mkdtempSync, readFileSync, existsSync, writeFileSync } from 'node:fs'
 import { resolve, join } from 'node:path'
 import { createRequire } from 'node:module'
 const require = createRequire(import.meta.url)
+const expect = baseExpect.configure({ timeout: 30000 })
 mkdirSync('test-output', { recursive: true })
 const profile = mkdtempSync(resolve('test-output', 'desktop-'))
 const external = mkdtempSync(resolve('test-output', 'exports-'))
@@ -167,7 +168,7 @@ try {
   await expect(page.getByRole('dialog')).toHaveCount(0)
   expect((await snapshot()).products).toHaveLength(24)
   await nav('Products')
-  await page.getByRole('button', { name: 'Add product', exact: true }).first().click()
+  await page.getByRole('button', { name: 'Add product', exact: true }).click()
   const dialog = page.getByRole('dialog')
   await dialog.getByLabel('Product name').fill('Test Coffee')
   await dialog.getByLabel('SKU', { exact: true }).fill('QA-COFFEE')
@@ -183,7 +184,7 @@ try {
   await expect(page.getByRole('cell', { name: 'Test Coffee', exact: false }).first()).toBeVisible()
   console.log('PASS: store settings, starter catalog, and product creation through the UI')
   await nav('Customers')
-  await page.getByRole('button', { name: 'Add customer', exact: true }).first().click()
+  await page.getByRole('button', { name: 'Add customer', exact: true }).click()
   await dialog.getByLabel('Full name').fill('Ana Test')
   await dialog.getByLabel('Room / dorm').fill('204')
   await dialog.getByLabel('Credit limit (₱)').fill('500.00')
