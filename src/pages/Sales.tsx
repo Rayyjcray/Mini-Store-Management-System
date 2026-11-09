@@ -145,7 +145,7 @@ export default function Sales() {
           <Empty
             title="A fresh sales book"
             text="Complete your first checkout to see its receipt, payment details and totals here."
-            action={<ReceiptText className="text-primary/40" size={24} />}
+            icon={<ReceiptText className="text-muted-foreground" size={25} />}
           />
         )}
       </div>

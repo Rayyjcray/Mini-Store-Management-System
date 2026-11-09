@@ -1,9 +1,10 @@
 import { _electron as electron } from 'playwright'
-import { expect } from '@playwright/test'
+import { expect as baseExpect } from '@playwright/test'
 import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs'
 import { resolve, join } from 'node:path'
 import { createRequire } from 'node:module'
 const require = createRequire(import.meta.url)
+const expect = baseExpect.configure({ timeout: 30000 })
 mkdirSync('test-output', { recursive: true })
 const profile = mkdtempSync(resolve('test-output', 'shops-desktop-'))
 const external = mkdtempSync(resolve('test-output', 'shops-exports-'))

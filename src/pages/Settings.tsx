@@ -173,7 +173,7 @@ export default function Settings({ onRestore }: { onRestore: () => void }) {
               <span className="break-all">{data.databasePath}</span>
             </p>
             <p className="mt-2 text-[10px] text-muted-foreground">
-              DormStore Management System · Version 1.3.0 · Philippine peso (PHP)
+              DormStore Management System · Version 1.3.1 · Philippine peso (PHP)
             </p>
           </div>
         </section>
