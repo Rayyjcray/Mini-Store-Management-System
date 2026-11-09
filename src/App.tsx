@@ -394,7 +394,7 @@ function Workspace() {
             <span>{data.settings.store_name} · Management System</span>
             <span className="flex items-center gap-1.5">
               <span className="size-1 rounded-full bg-primary" />
-              All changes saved locally <span className="ml-3 text-slate-400">v1.3.0</span>
+              All changes saved locally <span className="ml-3 text-slate-400">v1.3.1</span>
             </span>
           </footer>
         </div>

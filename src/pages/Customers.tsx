@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Plus, Users, Pencil, ArrowDownLeft, BookOpen } from 'lucide-react'
+import { Plus, Pencil, ArrowDownLeft, BookOpen } from 'lucide-react'
 import type { Customer, CustomerAccount } from '../../shared/contracts'
 import { useStore } from '../context'
 import { useOwner } from '../components/AuthGate'
@@ -177,15 +177,6 @@ export default function Customers() {
           <Empty
             title={data.customers.length ? 'No matching customers' : 'Know your regulars'}
             text="Add customers to track purchases on credit and record their repayments."
-            action={
-              owner &&
-              !data.customers.length && (
-                <Button onClick={() => setEditing('new')}>
-                  <Users />
-                  Add customer
-                </Button>
-              )
-            }
           />
         )}
       </section>

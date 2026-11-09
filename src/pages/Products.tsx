@@ -274,15 +274,6 @@ export default function Products({ inventory }: { inventory: boolean }) {
                   ? 'Try another search or category.'
                   : 'Add a product with its cost, selling price and opening stock.'
               }
-              action={
-                owner &&
-                !data.products.length && (
-                  <Button onClick={() => setEditing('new')}>
-                    <Plus />
-                    Add product
-                  </Button>
-                )
-              }
             />
           )}
         </section>

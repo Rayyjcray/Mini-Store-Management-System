@@ -1,8 +1,19 @@
 # Validation record
 
-Date: November 9, 2026. App version: 1.3.0. Host: Windows 11 x64 (build 22621). Development Node.js: 24.21.0. App runtime: Electron 45.2.3; better-sqlite3 13.0.3. Dependency versions are recorded in `package-lock.json`.
+Date: November 9, 2026. App version: 1.3.1. Host: Windows 11 x64 (build 22621). Development Node.js: 24.21.0. App runtime: Electron 45.2.3; better-sqlite3 13.0.3. Dependency versions are recorded in `package-lock.json`.
+
+## Version 1.3.1 upgrade check
+
+- The packaged executable and installer report version 1.3.1. The application ID, product name, database locations and `deleteAppDataOnUninstall: false` setting are unchanged.
+- A consistent SQLite copy of an isolated 1.3.0 desktop test profile was opened by the packaged 1.3.1 executable. The existing owner password worked, the workspace showed v1.3.1, and saved products, sales and customers were accessible.
+- After closing 1.3.1, every business table was compared with its baseline using row counts and SHA-256 digests of ordered rows. All business records, account credential rows, shop membership and schema versions were unchanged. Authentication activity logs are expected to record the new sign-in and are excluded from the unchanged-account comparison.
+- Only test databases were copied; Chromium cache/lock files were excluded and the test directory used inherited Windows permissions. The owner's normal store profile was never opened or modified by the test.
+- Upgrade result: `test-output/upgrade-1.3.1-result.json`. UI release notes: [CHANGELOG.md](CHANGELOG.md).
+- The full fresh-profile owner/staff workflow passed on the packaged 1.3.1 executable with zero renderer errors. Desktop assertion waits allow 30 seconds for secure password operations on a slow test host; the original five-second assertion window was insufficient in the first run.
 
 ## Completed
+
+The 48 database/authentication/shop integration tests below passed for the 1.3.0 baseline. Version 1.3.1 changes renderer UI, the desktop driver and release metadata; the database, authentication and shop-isolation implementation is unchanged. The additional upgrade verification above checks preservation of existing data in the new executable.
 
 - TypeScript strict checking and production main/preload/renderer builds.
 - **19 passing database integration tests** inside Electron's Node runtime, including actual temporary SQLite files:
@@ -31,12 +42,12 @@ Date: November 9, 2026. App version: 1.3.0. Host: Windows 11 x64 (build 22621). 
   - Actual application close/relaunch preserving sales, debt and settings.
 - **Independent owner/shop desktop workflow** uses a separate fresh profile: creates Owner 1's products, customers, debt sale and staff; registers Owner 2 through the sign-in UI and verifies an empty private shop; rejects foreign shop/account/audit/file access; sells identical SKUs with overlapping local IDs independently; rejects Owner 1's backup in Owner 2's shop; adds/switches Owner 2's branch through the UI; confirms and clears a cart on switching; verifies Owner 1's unchanged records and valid same-shop restore; signs in staff assigned only to Owner 1's shop; and confirms both Owner 2 shops remain intact. Zero renderer errors. Results: `test-output/shops-e2e-result.json`.
 - Captured and reviewed screenshots of private shops, account management, security activity, setup/sign-in, dashboard, reports and checkout. Test results and images are under `test-output/`. Desktop screenshots use Electron's native visible-page capture, with background throttling disabled only in the test driver, to avoid browser screenshot capture timeouts on this host.
-- Prettier check passed for the source; a fresh `npm.cmd audit` reported **zero known vulnerabilities** after the security update. A scoped minimatch override remains in place for build tooling.
+- Prettier check passed for the source. The 1.3.0 dependency audit reported **zero known vulnerabilities**; 1.3.1 does not change dependencies. A scoped minimatch override remains in place for build tooling.
 - Electron Builder generated a Windows x64 NSIS installer and unpacked application, including the native SQLite module and app icon.
 
 ## Packaged executable
 
-**Passed:** the full owner/staff desktop workflow suite was run against the final 1.3.0 `release/win-unpacked/DormStore Management System.exe`, including real close/relaunch, permission denials, data redaction, account disabling/unlocking, security activity, authentication rate limiting, and zero renderer errors. Results are recorded in `test-output/packaged-e2e-result.json`. The desktop script can target the packaged executable with:
+**Passed:** the full owner/staff desktop workflow suite was run against the final 1.3.1 `release/win-unpacked/DormStore Management System.exe`, including real close/relaunch, permission denials, data redaction, account disabling/unlocking, security activity, authentication rate limiting, and zero renderer errors. Results are recorded in `test-output/packaged-e2e-result.json`. The desktop script can target the packaged executable with:
 
 ```powershell
 $env:DORMSTORE_TEST_EXE = (Resolve-Path 'release/win-unpacked/DormStore Management System.exe').Path
@@ -44,13 +55,13 @@ node scripts/e2e.mjs
 node scripts/shops-e2e.mjs
 ```
 
-**Passed:** the independent-owner and multi-shop suite also ran against the same final 1.3.0 packaged executable. All three shops retained their own records, foreign-shop access and restores were rejected, shop switching cleared drafts, assigned staff stayed in their shop, and no renderer errors occurred. Results: `test-output/packaged-shops-e2e-result.json`.
+**1.3.0 baseline passed:** the independent-owner and multi-shop suite ran against the 1.3.0 packaged executable. All three shops retained their own records, foreign-shop access and restores were rejected, shop switching cleared drafts, assigned staff stayed in their shop, and no renderer errors occurred. Results: `test-output/packaged-shops-e2e-result.json`. These backend paths are unchanged in 1.3.1; this release adds the existing-profile upgrade check and reruns the full owner/staff workflow described above.
 
 The same application workflows run with a fresh test profile. Dialog selections are supplied programmatically; the real main-process file handlers and database operations run.
 
-Final installer: `release/DormStore-Setup-1.3.0-x64.exe`.
+Final installer: `release/DormStore-Setup-1.3.1-x64.exe`.
 
-The installer checksum is recorded in `release/DormStore-Setup-1.3.0-x64.exe.sha256` after packaging.
+The installer checksum is recorded in `release/DormStore-Setup-1.3.1-x64.exe.sha256` after packaging.
 
 ## Release checks requiring target hardware or credentials
 

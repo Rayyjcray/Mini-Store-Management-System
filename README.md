@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="#installation"><img src="docs/images/badges/version.svg" alt="Version 1.3.0" /></a>
+  <a href="#installation"><img src="docs/images/badges/version.svg" alt="Version 1.3.1" /></a>
   <a href="#installation"><img src="docs/images/badges/platform.svg" alt="Target platform: Windows 10 and 11 x64" /></a>
   <a href="#data-and-recovery"><img src="docs/images/badges/storage.svg" alt="Local SQLite storage" /></a>
   <a href="VALIDATION.md"><img src="docs/images/badges/validated.svg" alt="48 integration tests passed in the documented validation run" /></a>
@@ -136,7 +136,9 @@ An owner can manage several shops. Staff stay assigned to one shop, and every bu
 
 ### For store users
 
-If the repository maintainer has published a GitHub Release, download its `DormStore-Setup-1.3.0-x64.exe` installer from the repository's **Releases** section. Run it, choose the installation folder and open DormStore from the desktop shortcut. On first launch, create an owner account and shop, then save your recovery code privately.
+If the repository maintainer has published a GitHub Release, download its `DormStore-Setup-1.3.1-x64.exe` installer from the repository's **Releases** section. Run it, choose the installation folder and open DormStore from the desktop shortcut. On first launch, create an owner account and shop, then save your recovery code privately.
+
+To update an existing installation, save a backup of each shop, close DormStore and run the new setup installer using the same Windows account. Accounts and shop databases remain in the Windows user-data folder, separate from the application files. Version 1.3.1 contains UI cleanup and does not change the database schema. See [CHANGELOG.md](CHANGELOG.md) for release notes.
 
 The installed application needs no Node.js, npm, database server or internet connection. Windows 10/11 x64 are the configured targets; validation on this workspace was performed on Windows 11. See [the validation record](VALIDATION.md) for hardware and release checks.
 
@@ -162,7 +164,7 @@ npm.cmd run pack           # Unpacked Windows application in release/win-unpacke
 npm.cmd run dist           # Windows x64 NSIS installer in release
 ```
 
-Install the generated `release/DormStore-Setup-1.3.0-x64.exe` on the store computer. The installer allows choosing the installation directory and creates a desktop shortcut. Node.js and npm are not needed by the installed application. The installer preserves store data on uninstall. Existing usernames, passwords, recovery codes and lockout state are retained. If no account exists, first launch asks you to create the initial owner and shop. Downgrading to an older app is unsupported.
+Install the generated `release/DormStore-Setup-1.3.1-x64.exe` on the store computer. The installer allows choosing the installation directory and creates a desktop shortcut. Node.js and npm are not needed by the installed application. The installer preserves store data on uninstall. Existing usernames, passwords, recovery codes and lockout state are retained. If no account exists, first launch asks you to create the initial owner and shop. Downgrading to an older app is unsupported.
 
 When upgrading an existing shared store, the earliest active owner keeps its business records, staff and historical security activity. Every other existing owner keeps their login and receives a new empty private shop. Historical records are never copied between owners. Back up the current store before upgrading and verify the assigned owner before continuing operations.
 
