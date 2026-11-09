@@ -153,6 +153,8 @@ npm.cmd run dev
 
 Using `npm.cmd` avoids the PowerShell execution-policy error that can block `npm.ps1`.
 
+Development uses a separate `%APPDATA%/DormStore-dev` profile for its accounts, shop records and browser cache, so it can run alongside the installed application. A first development launch starts with empty records and asks you to create an owner and shop. `DORMSTORE_DATA_DIR`, when set, overrides both the development and installed profiles for isolated testing.
+
 ```powershell
 npm.cmd run build          # TypeScript checks and production bundles
 npm.cmd test               # SQLite integration tests in Electron's Node runtime
