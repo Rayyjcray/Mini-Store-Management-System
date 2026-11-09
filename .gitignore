@@ -1,0 +1,67 @@
+# Installed dependencies and generated application packages
+node_modules/
+/out/
+/dist/
+/release/
+.vite/
+*.tsbuildinfo
+*.exe
+*.msi
+*.msix
+*.appx
+*.blockmap
+*.node
+
+# Generated tests, local previews, browser profiles and coverage
+/test-output/
+/test-results/
+/playwright-report/
+/coverage/
+.nyc_output/
+__pycache__/
+*.py[cod]
+
+# Local shop records, authentication databases, exports and backups
+/data/
+/backups/
+/exports/
+*.db
+*.db-*
+*.db.previous
+*.sqlite
+*.sqlite-*
+*.sqlite.previous
+*.sqlite3
+*.sqlite3-*
+*.sqlite3.previous
+
+# Local configuration, credentials and code-signing keys
+.env
+.env.*
+!.env.example
+!.env.*.example
+!.env.template
+*.pem
+*.key
+*.pfx
+*.p12
+.aws/
+.ssh/
+
+# Logs, temporary copies and editor/OS state
+*.log
+*.tmp
+*.bak
+*~
+.idea/
+.history/
+*.code-workspace
+*.suo
+*.user
+.DS_Store
+._*
+Thumbs.db
+Desktop.ini
+
+# Keep build/icon.ico and build/icon.png: these are project artwork.
+# Keep docs/images/: the public README uses these images and badges.

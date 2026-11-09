@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="420" viewBox="0 0 1280 420" role="img" aria-labelledby="title description">
+  <title id="title">DormStore Management System</title>
+  <desc id="description">An offline Windows point of sale application with private shops, local records, and sales and inventory management.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#102e27"/>
+      <stop offset="1" stop-color="#0b1916"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#17684e"/>
+      <stop offset="1" stop-color="#268568"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="420" rx="24" fill="url(#background)"/>
+  <circle cx="1190" cy="30" r="260" fill="#163e31" opacity=".32"/>
+  <circle cx="1000" cy="440" r="230" fill="#1e5942" opacity=".16"/>
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <rect x="56" y="48" width="52" height="52" rx="15" fill="url(#accent)"/>
+    <g fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M68 71h28l-4-9H72zM70 78v13h24V78M78 91V81h8v10M68 71v3a4 4 0 0 0 7 2 4 4 0 0 0 7 0 4 4 0 0 0 7 0 4 4 0 0 0 7-2v-3"/>
+    </g>
+    <text x="122" y="82" fill="#f3faf6" font-size="29" font-weight="700">DormStore.</text>
+    <text x="56" y="158" fill="#9ed5b9" font-size="13" font-weight="600" letter-spacing="3">YOUR EVERYDAY STORE COMPANION</text>
+    <text x="53" y="225" fill="#f5faf7" font-size="55" font-weight="700" letter-spacing="-1.8">Small store.</text>
+    <text x="53" y="286" fill="#a9e6c4" font-size="55" font-weight="700" letter-spacing="-1.8">Everything in order.</text>
+    <text x="56" y="330" fill="#b6c7be" font-size="17">Sales, stock, customer credit and private shops.</text>
+    <circle cx="63" cy="373" r="5" fill="#75dca1"/>
+    <text x="78" y="378" fill="#d5e4dc" font-size="14">Windows desktop</text>
+    <circle cx="231" cy="373" r="2" fill="#739386"/>
+    <text x="247" y="378" fill="#d5e4dc" font-size="14">Works offline</text>
+    <circle cx="363" cy="373" r="2" fill="#739386"/>
+    <text x="379" y="378" fill="#d5e4dc" font-size="14">Local SQLite storage</text>
+    <rect x="744" y="72" width="470" height="280" rx="17" fill="#0a1813" opacity=".5"/>
+    <rect x="734" y="62" width="470" height="280" rx="17" fill="#f6faf7"/>
+    <path d="M751 62h436a17 17 0 0 1 17 17v26H734V79a17 17 0 0 1 17-17" fill="#e5eee8"/>
+    <circle cx="757" cy="84" r="4" fill="#9cb2a4"/>
+    <circle cx="772" cy="84" r="4" fill="#9cb2a4"/>
+    <circle cx="787" cy="84" r="4" fill="#9cb2a4"/>
+    <text x="815" y="89" fill="#3f5d4c" font-size="12">A clearer view of your store</text>
+    <text x="758" y="139" fill="#234735" font-size="18" font-weight="700">One workspace. Your shops.</text>
+    <rect x="758" y="157" width="128" height="65" rx="9" fill="#e6f1e9"/>
+    <rect x="900" y="157" width="128" height="65" rx="9" fill="#edf2ed"/>
+    <rect x="1042" y="157" width="138" height="65" rx="9" fill="#edf2ed"/>
+    <text x="772" y="181" fill="#5f7768" font-size="11">CHECKOUT</text>
+    <text x="772" y="204" fill="#17684e" font-size="16" font-weight="600">Sell with ease</text>
+    <text x="914" y="181" fill="#5f7768" font-size="11">INVENTORY</text>
+    <text x="914" y="204" fill="#294d39" font-size="16" font-weight="600">Know your stock</text>
+    <text x="1056" y="181" fill="#5f7768" font-size="11">CUSTOMER CREDIT</text>
+    <text x="1056" y="204" fill="#294d39" font-size="16" font-weight="600">Track balances</text>
+    <rect x="758" y="238" width="422" height="80" rx="9" fill="#fff" stroke="#dfe9e2"/>
+    <text x="775" y="263" fill="#4a6855" font-size="12" font-weight="600">Independent owners</text>
+    <rect x="775" y="275" width="172" height="28" rx="7" fill="#edf6ef"/>
+    <rect x="967" y="275" width="195" height="28" rx="7" fill="#edf6ef"/>
+    <text x="790" y="294" fill="#17684e" font-size="12">Owner 1 / Private shops</text>
+    <text x="982" y="294" fill="#17684e" font-size="12">Owner 2 / Private shops</text>
+  </g>
+</svg>

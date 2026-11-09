@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="243" height="24" viewBox="0 0 243 24" role="img" aria-label="validated: 48 integration tests">
+  <title>validated: 48 integration tests</title>
+  <defs><clipPath id="clip"><rect width="243" height="24" rx="4"/></clipPath></defs>
+  <g clip-path="url(#clip)"><rect width="243" height="24" fill="#37443f"/><rect x="83" width="160" height="24" fill="#17684e"/></g>
+  <g fill="#fff" font-family="Verdana,Arial,sans-serif" font-size="11" text-anchor="middle">
+    <text x="41.5" y="16">validated</text><text x="163.0" y="16">48 integration tests</text>
+  </g>
+</svg>
