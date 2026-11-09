@@ -18,9 +18,13 @@ import { ShopStores } from './shops'
 
 app.setName('DormStore')
 app.setAppUserModelId('com.dormstore.management')
-if (process.env.DORMSTORE_DATA_DIR) {
-  mkdirSync(process.env.DORMSTORE_DATA_DIR, { recursive: true })
-  app.setPath('userData', process.env.DORMSTORE_DATA_DIR)
+if (process.env.DORMSTORE_DATA_DIR || !app.isPackaged) {
+  // Keep development instances away from the installed app's database, cache and lock.
+  const profile = process.env.DORMSTORE_DATA_DIR || join(app.getPath('appData'), 'DormStore-dev')
+  mkdirSync(profile, { recursive: true })
+  app.setPath('userData', profile)
+  // Chromium's session path must also be set explicitly before app readiness.
+  app.setPath('sessionData', profile)
 }
 const hasLock = app.requestSingleInstanceLock()
 if (!hasLock) app.quit()
