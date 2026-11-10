@@ -3,7 +3,15 @@ import { KeyRound, Pencil, Plus, RefreshCw, ShieldCheck, Users } from 'lucide-re
 import type { SecurityEvent, UserAccount } from '../../shared/contracts'
 import { useStore } from '../context'
 import { useOwner } from '../components/AuthGate'
-import { Badge, DataForm, Empty, Field, Input, PageTitle } from '../components/common'
+import {
+  Badge,
+  DataForm,
+  Empty,
+  Field,
+  Input,
+  PageTitle,
+  PasswordInput,
+} from '../components/common'
 import { Button } from '../components/ui/button'
 import { Modal } from '../components/ui/dialog'
 type Edit = { kind: 'new' } | { kind: 'edit' | 'reset'; account: UserAccount }
@@ -416,8 +424,7 @@ function AccountForm({
           {edit.kind !== 'edit' && (
             <div className="grid grid-cols-2 gap-4">
               <Field label="Temporary password" hint="At least 12 characters.">
-                <Input
-                  type="password"
+                <PasswordInput
                   name="password"
                   required
                   minLength={12}
@@ -426,8 +433,7 @@ function AccountForm({
                 />
               </Field>
               <Field label="Confirm temporary password">
-                <Input
-                  type="password"
+                <PasswordInput
                   name="confirmPassword"
                   required
                   minLength={12}
@@ -442,9 +448,8 @@ function AccountForm({
               label="Your owner password"
               hint="Account management requires your current password."
             >
-              <Input
+              <PasswordInput
                 name="currentPassword"
-                type="password"
                 required
                 maxLength={128}
                 autoComplete="current-password"

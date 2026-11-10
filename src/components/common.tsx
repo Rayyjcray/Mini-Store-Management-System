@@ -6,12 +6,37 @@ import {
   type InputHTMLAttributes,
   type ReactNode,
 } from 'react'
-import { Search, PackageOpen, ArrowUpRight } from 'lucide-react'
+import { Search, PackageOpen, ArrowUpRight, Eye, EyeOff } from 'lucide-react'
 import { cn } from '../lib/utils'
 import { Button } from './ui/button'
 export const Input = ({ className, ...props }: InputHTMLAttributes<HTMLInputElement>) => (
   <input className={cn('input', className)} {...props} />
 )
+export function PasswordInput({
+  className,
+  ...props
+}: Omit<InputHTMLAttributes<HTMLInputElement>, 'type'>) {
+  const [visible, setVisible] = useState(false)
+  return (
+    <div className="relative">
+      <Input {...props} type={visible ? 'text' : 'password'} className={cn('pr-12', className)} />
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon"
+        className="absolute right-1 top-1/2 -translate-y-1/2"
+        aria-label={visible ? 'Hide password' : 'Show password'}
+        aria-pressed={visible}
+        aria-controls={props.id}
+        title={visible ? 'Hide password' : 'Show password'}
+        disabled={props.disabled}
+        onClick={() => setVisible((current) => !current)}
+      >
+        {visible ? <EyeOff aria-hidden="true" /> : <Eye aria-hidden="true" />}
+      </Button>
+    </div>
+  )
+}
 export function Field({
   label,
   children,

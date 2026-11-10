@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { DatabaseBackup, Download, Upload, PackagePlus, ShieldCheck, HardDrive } from 'lucide-react'
 import { useStore } from '../context'
-import { DataForm, Field, Input, PageTitle } from '../components/common'
+import { DataForm, Field, Input, PageTitle, PasswordInput } from '../components/common'
 import { Button } from '../components/ui/button'
 import { Modal } from '../components/ui/dialog'
 import { useOwner } from '../components/AuthGate'
+import type { BackupFormat } from '../../shared/contracts'
 export default function Settings({ onRestore }: { onRestore: () => void }) {
   const { data, busy, act } = useStore()
   const { username, role } = useOwner()
@@ -12,6 +13,7 @@ export default function Settings({ onRestore }: { onRestore: () => void }) {
   const [changingPassword, setChangingPassword] = useState(false)
   const [seed, setSeed] = useState(false)
   const [backupNotice, setBackupNotice] = useState('')
+  const [backupFormat, setBackupFormat] = useState<BackupFormat>('db')
   const s = data.settings
   return (
     <>
@@ -93,12 +95,35 @@ export default function Settings({ onRestore }: { onRestore: () => void }) {
                 disk to protect against computer failure.
               </p>
               <div className="space-y-3">
+                <Field label="Backup format">
+                  <select
+                    className="input"
+                    value={backupFormat}
+                    disabled={busy}
+                    onChange={(event) => setBackupFormat(event.target.value as BackupFormat)}
+                  >
+                    <option value="db">Database (.db) — default</option>
+                    <option value="xlsx">Excel workbook (.xlsx) — owner-friendly</option>
+                    <option value="csv">CSV (.csv) — one sheet</option>
+                  </select>
+                </Field>
+                <p className="text-xs leading-relaxed text-muted-foreground">
+                  {backupFormat === 'xlsx'
+                    ? 'Separate tabs for your shop overview, inventory, customer balances, sales and expenses, with names and peso amounts.'
+                    : backupFormat === 'csv'
+                      ? 'Your shop overview and clearly labeled records on one sheet. Choose Excel for separate tabs and formatting.'
+                      : 'A complete database copy for restoring your shop. Choose Excel to browse your records in a spreadsheet.'}
+                </p>
                 <Button
                   className="w-full"
                   variant="outline"
                   disabled={busy}
                   onClick={async () => {
-                    const r = await act(() => window.dormstore.backup(), undefined, false)
+                    const r = await act(
+                      () => window.dormstore.backup(backupFormat),
+                      undefined,
+                      false,
+                    )
                     if (r?.value) setBackupNotice(`Backup saved: ${r.value}`)
                   }}
                 >
@@ -129,7 +154,9 @@ export default function Settings({ onRestore }: { onRestore: () => void }) {
                 </p>
               )}
               <p className="mt-4 text-[10px] leading-relaxed text-muted-foreground">
-                Restoring replaces current records after confirmation and saves a safety copy first.
+                All formats can restore this shop. Keep the original backup file; spreadsheet
+                exports are snapshots for viewing. Restore accepts DormStore .db, .csv and .xlsx
+                backups and saves a safety copy before replacing current records.
               </p>
             </section>
             <section className="panel p-5">
@@ -204,8 +231,7 @@ export default function Settings({ onRestore }: { onRestore: () => void }) {
           >
             <div className="space-y-5">
               <Field label="Current password">
-                <Input
-                  type="password"
+                <PasswordInput
                   name="currentPassword"
                   required
                   maxLength={128}
@@ -214,8 +240,7 @@ export default function Settings({ onRestore }: { onRestore: () => void }) {
                 />
               </Field>
               <Field label="New password" hint="Use at least 12 characters.">
-                <Input
-                  type="password"
+                <PasswordInput
                   name="password"
                   required
                   minLength={12}
@@ -224,8 +249,7 @@ export default function Settings({ onRestore }: { onRestore: () => void }) {
                 />
               </Field>
               <Field label="Confirm new password">
-                <Input
-                  type="password"
+                <PasswordInput
                   name="confirmPassword"
                   required
                   minLength={12}

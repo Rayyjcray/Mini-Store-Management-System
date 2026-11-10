@@ -9,7 +9,7 @@ import {
 } from 'react'
 import { ArrowLeft, KeyRound, LoaderCircle, LockKeyhole, ShieldCheck, Store } from 'lucide-react'
 import type { AccountRole, AuthAccess, AuthState, Result } from '../../shared/contracts'
-import { DataForm, Field, Input } from './common'
+import { DataForm, Field, Input, PasswordInput } from './common'
 import { Button } from './ui/button'
 
 const OwnerContext = createContext<{
@@ -279,9 +279,8 @@ export default function AuthGate({ children }: { children: ReactNode }) {
                   )}
                   {forced && (
                     <Field label="Temporary password">
-                      <Input
+                      <PasswordInput
                         name="currentPassword"
-                        type="password"
                         required
                         maxLength={128}
                         autoComplete="current-password"
@@ -309,9 +308,8 @@ export default function AuthGate({ children }: { children: ReactNode }) {
                         : undefined
                     }
                   >
-                    <Input
+                    <PasswordInput
                       name="password"
-                      type="password"
                       required
                       minLength={setup || recovering || forced ? 12 : 1}
                       maxLength={128}
@@ -322,9 +320,8 @@ export default function AuthGate({ children }: { children: ReactNode }) {
                   </Field>
                   {(setup || recovering || forced) && (
                     <Field label="Confirm password">
-                      <Input
+                      <PasswordInput
                         name="confirmPassword"
-                        type="password"
                         required
                         minLength={12}
                         maxLength={128}

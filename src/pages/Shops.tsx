@@ -3,7 +3,7 @@ import { Plus, Store, ArrowUpRight } from 'lucide-react'
 import type { Shop } from '../../shared/contracts'
 import { useOwner } from '../components/AuthGate'
 import { useStore } from '../context'
-import { Badge, DataForm, Field, Input, PageTitle } from '../components/common'
+import { Badge, DataForm, Field, Input, PageTitle, PasswordInput } from '../components/common'
 import { Button } from '../components/ui/button'
 import { Modal } from '../components/ui/dialog'
 export default function Shops() {
@@ -99,9 +99,8 @@ export default function Shops() {
                 <Input name="name" required maxLength={120} autoFocus />
               </Field>
               <Field label="Your owner password">
-                <Input
+                <PasswordInput
                   name="password"
-                  type="password"
                   required
                   maxLength={128}
                   autoComplete="current-password"
