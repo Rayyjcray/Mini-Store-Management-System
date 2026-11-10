@@ -307,6 +307,101 @@ try {
   await expect(page.getByRole('button', { name: 'Restore a backup' })).toBeEnabled()
   await expect.poll(async () => (await snapshot()).expenses.length).toBe(savedCount)
   console.log('PASS: native backup and restore handlers preserve the selected snapshot')
+  const csvBackup = join(external, 'manual-backup.csv')
+  const stockBeforeCSV = (await snapshot()).products.find((p) => p.id === coffee.id).stock
+  await page.getByLabel('Backup format', { exact: true }).selectOption('csv')
+  await app.evaluate(({ dialog }, path) => {
+    dialog.showSaveDialog = async (_window, options) => {
+      globalThis.__backupSaveOptions = options
+      return { canceled: false, filePath: path }
+    }
+  }, csvBackup)
+  await page.getByRole('button', { name: 'Save a backup' }).click()
+  await expect.poll(() => existsSync(csvBackup)).toBe(true)
+  await expect(page.getByRole('button', { name: 'Restore a backup' })).toBeEnabled()
+  expect(readFileSync(csvBackup, 'utf8')).toContain('"DormStore shop backup","2"')
+  expect(readFileSync(csvBackup, 'utf8')).toContain('"Unpaid customer balances"')
+  expect(readFileSync(csvBackup, 'utf8')).toContain('"price (PHP)"')
+  expect(await app.evaluate(() => globalThis.__backupSaveOptions.filters[0].extensions)).toEqual([
+    'csv',
+  ])
+  expect(await app.evaluate(() => globalThis.__backupSaveOptions.defaultPath)).toMatch(/\.csv$/)
+  await capture('test-output/settings-backup-formats.png')
+  await ok(
+    page.evaluate(
+      (id) =>
+        window.dormstore.adjustStock({
+          product_id: id,
+          quantity: 3,
+          reason: 'Restock',
+          notes: 'After CSV backup',
+        }),
+      coffee.id,
+    ),
+  )
+  await app.evaluate(({ dialog }, path) => {
+    dialog.showOpenDialog = async (_window, options) => {
+      globalThis.__backupOpenOptions = options
+      return { canceled: false, filePaths: [path] }
+    }
+    dialog.showMessageBox = async () => ({ response: 0, checkboxChecked: false })
+  }, csvBackup)
+  // Cancelling the confirmation must leave current stock untouched.
+  expect((await page.evaluate(() => window.dormstore.restore())).data).toBe(false)
+  expect((await snapshot()).products.find((p) => p.id === coffee.id).stock).toBe(stockBeforeCSV + 3)
+  expect(await app.evaluate(() => globalThis.__backupOpenOptions.filters[0].extensions)).toEqual([
+    'db',
+    'csv',
+    'xlsx',
+  ])
+  await app.evaluate(({ dialog }) => {
+    dialog.showMessageBox = async () => ({ response: 1, checkboxChecked: false })
+  })
+  await page.getByRole('button', { name: 'Restore a backup' }).click()
+  await expect(page.getByRole('button', { name: 'Restore a backup' })).toBeEnabled()
+  await expect
+    .poll(async () => (await snapshot()).products.find((p) => p.id === coffee.id).stock)
+    .toBe(stockBeforeCSV)
+  expect((await page.evaluate(() => window.dormstore.backup('invalid'))).ok).toBe(false)
+  await page.getByLabel('Backup format', { exact: true }).selectOption('db')
+  console.log('PASS: CSV backup format selector, dialog filters, cancellation and full restore')
+  const excelBackup = join(external, 'owner-backup.xlsx')
+  await page.getByLabel('Backup format', { exact: true }).selectOption('xlsx')
+  await app.evaluate(({ dialog }, path) => {
+    dialog.showSaveDialog = async (_window, options) => {
+      globalThis.__backupSaveOptions = options
+      return { canceled: false, filePath: path }
+    }
+  }, excelBackup)
+  await page.getByRole('button', { name: 'Save a backup' }).click()
+  await expect(page.getByRole('button', { name: 'Restore a backup' })).toBeEnabled()
+  await expect.poll(() => existsSync(excelBackup)).toBe(true)
+  expect(await app.evaluate(() => globalThis.__backupSaveOptions.filters[0].extensions)).toEqual([
+    'xlsx',
+  ])
+  await capture('test-output/settings-excel-backup.png')
+  await ok(
+    page.evaluate(
+      (id) =>
+        window.dormstore.adjustStock({
+          product_id: id,
+          quantity: 2,
+          reason: 'Restock',
+          notes: 'After Excel backup',
+        }),
+      coffee.id,
+    ),
+  )
+  await app.evaluate(({ dialog }, path) => {
+    dialog.showOpenDialog = async () => ({ canceled: false, filePaths: [path] })
+  }, excelBackup)
+  await page.getByRole('button', { name: 'Restore a backup' }).click()
+  await expect(page.getByRole('button', { name: 'Restore a backup' })).toBeEnabled()
+  await expect
+    .poll(async () => (await snapshot()).products.find((p) => p.id === coffee.id).stock)
+    .toBe(stockBeforeCSV)
+  await page.getByLabel('Backup format', { exact: true }).selectOption('db')
+  console.log('PASS: Excel workbook selector, save filter and complete restore through Settings')
   await nav('Sales history')
   const cashSale = (await snapshot()).sales.find((s) => s.payment_method === 'cash')
   await page.getByRole('button', { name: `Void sale ${cashSale.receipt}` }).click()

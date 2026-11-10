@@ -7,11 +7,11 @@ import {
   powerMonitor,
   type IpcMainInvokeEvent,
 } from 'electron'
-import { join } from 'node:path'
+import { extname, join } from 'node:path'
 import { mkdirSync, writeFileSync, appendFileSync } from 'node:fs'
 import { Store, errorMessage, localDay } from './store'
 import type { Receipt } from '../shared/contracts'
-import { rangeSchema } from '../shared/validation'
+import { backupFormatSchema, rangeSchema } from '../shared/validation'
 import { OwnerAuth } from './auth'
 import { visibleReceipt, visibleSnapshot } from './access'
 import { ShopStores } from './shops'
@@ -160,16 +160,29 @@ function register() {
     auth.renameCurrentShop(store.settings().store_name)
   })
   business('catalog:seed', (store) => store.seedCatalog())
-  business('database:backup', async (store, _input, generation) => {
+  business('database:backup', async (store, input, generation) => {
+    const format = backupFormatSchema.parse(input)
     maintenance = true
     try {
       const { filePath, canceled } = await dialog.showSaveDialog(window!, {
-        title: 'Save database backup',
-        defaultPath: `DormStore-${auth.currentShop().id.slice(0, 8)}-${localDay()}.db`,
-        filters: [{ name: 'SQLite database', extensions: ['db'] }],
+        title: 'Save shop backup',
+        defaultPath: `DormStore-${auth.currentShop().id.slice(0, 8)}-${localDay()}.${format}`,
+        filters: [
+          {
+            name:
+              format === 'xlsx'
+                ? 'Excel workbook backup'
+                : format === 'csv'
+                  ? 'CSV shop backup'
+                  : 'SQLite database backup',
+            extensions: [format],
+          },
+        ],
       })
       if (canceled || !filePath) return null
       auth.requireSession(generation)
+      if (extname(filePath).toLowerCase() !== `.${format}`)
+        throw new Error(`Use a .${format} filename for the selected backup format.`)
       stores.assertExternalDestination(filePath)
       await store.backup(filePath)
       return filePath
@@ -183,7 +196,12 @@ function register() {
       const selected = await dialog.showOpenDialog(window!, {
         title: 'Choose a DormStore backup',
         properties: ['openFile'],
-        filters: [{ name: 'SQLite database', extensions: ['db'] }],
+        filters: [
+          { name: 'DormStore backups', extensions: ['db', 'csv', 'xlsx'] },
+          { name: 'SQLite database backup', extensions: ['db'] },
+          { name: 'CSV shop backup', extensions: ['csv'] },
+          { name: 'Excel workbook backup', extensions: ['xlsx'] },
+        ],
       })
       if (selected.canceled || !selected.filePaths[0]) return false
       auth.requireSession(generation)

@@ -231,6 +231,14 @@ A separate SQLite file is selected by the authenticated account and active shop 
 
 When a shop is first opened each day, a backup is created in `backups/auto-YYYY-MM-DD.db` beside that shop's database. Automatic backups remain on the same computer and are not automatically pruned. Use **Save a backup** to save a consistent SQLite snapshot to a USB drive or separate disk. Manual backup and CSV destinations must be outside the application's managed data folder to protect other shops and credentials. Prefer this over manually copying an open WAL database.
 
+In **Settings → Backups & recovery**, choose **Database (.db) — default**, **Excel workbook (.xlsx) — owner-friendly**, or **CSV (.csv) — one sheet** before saving. All three contain the full active shop, including archived products, customers, sales and sale items, stock movements, customer credit/repayment entries, expenses, settings and the business audit log.
+
+Choose Excel to read the shop in separate formatted tabs: **Shop overview**, **Inventory**, **Customers**, **Sales**, **Sale items**, **Credit & repayments**, **Stock history**, and **Expenses**. The overview explains all-time sales, profit, collections, current stock value and unpaid customer balances. Detail tabs show customer/product names, peso amounts, clear statuses, filters and explicit messages when no records exist. Complete restore records are kept in a hidden application sheet; technical IDs and audit JSON do not appear in the owner views. ExcelJS generates and reads the workbook locally, without a server or internet connection.
+
+CSV starts with the same plain-language overview and named sections on one sheet, followed by a clearly marked restore-only appendix. CSV cannot preserve multiple tabs, colors or column widths; use Excel for those features. Older v1 CSV backups are still accepted. The appendix preserves exact values, including nulls and original text; spreadsheet formula prefixes in CSV text are escaped.
+
+**Restore a backup** accepts `.db`, `.csv`, and `.xlsx` backups saved by DormStore for the current shop. Keep the original backup file: these spreadsheets are viewing snapshots, and editing the owner views does not update the saved restore records. Workbook restore rejects changed report values, incomplete restore data and checksum mismatches. CSV/workbook records are staged in a temporary database and checked before replacing live records. Ordinary spreadsheets, sales reports or product lists cannot be restored. Daily automatic backups and safety copies remain `.db` files. None of the manual formats contains login accounts or passwords.
+
 **Restore a backup** verifies shop identity, SQLite integrity, schema version, foreign keys and application queries before replacing records. Backups from another shop are rejected. Old backups without a shop identity can be restored only into the original migrated shop. Restoration requires confirmation and first saves `before-restore-TIMESTAMP.db` alongside the active database. A successful restore clears the checkout cart. Business backups preserve the shop identity and do not recreate accounts on a new installation; moving to another computer requires the whole application data folder and a separate secure Windows transfer. Keep backups private because they include customer information.
 
 For isolated development/testing only, set `DORMSTORE_DATA_DIR` to a separate folder before launching. It overrides the app profile and database location. Desktop tests use a fresh folder under `test-output/` and never touch normal store records. Test screenshots and results are saved there.
@@ -243,6 +251,9 @@ electron/preload.ts        Explicit typed contextBridge methods
 electron/auth.ts           Account migration, password/session management, persistent limits and security activity
 electron/access.ts         Staff data redaction for snapshots and receipts
 electron/store.ts          Schema, database transactions, reports, backup/restore
+electron/csv-backup.ts     Readable full-shop CSV backup format, parsing and import validation
+electron/owner-report.ts   Owner overview, named records and customer balance views
+electron/workbook-backup.ts Styled multi-tab Excel backups and checked restore data
 electron/shops.ts          Authorized per-shop databases, daily backups and output path guards
 docs/images/              README banner and screenshots from isolated test profiles
 shared/contracts.ts       Renderer/main DTOs

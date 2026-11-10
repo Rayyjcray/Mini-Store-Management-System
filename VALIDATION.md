@@ -1,5 +1,13 @@
 # Validation record
 
+## Owner-readable backups and restore check — November 10, 2026
+
+- Source build, strict TypeScript checking and formatting passed.
+- All **54 integration tests passed**, including **25 store/backup tests**. Coverage includes full DB/CSV/XLSX round trips, every business table, archived products, exact centavos, quoted/multiline Unicode text, null versus empty values, CSV formula escaping, owner-summary reconciliation, safety copies, temporary-file cleanup, malformed/incomplete files, invalid numbers/references/payments, empty shops and foreign-shop rejection. Original v1 CSV files remain restorable. Workbook checks cover modified owner views, corrupt restore data, multiple restore chunks and ordinary unrelated workbooks.
+- The full Electron desktop workflow passed with an isolated profile and zero renderer errors. It checks all three format choices, format-specific save filenames/filters, combined restore filters, CSV and workbook export/restore through Settings, cancelled restore confirmation, and DB backup/restore behavior.
+- Reviewed `test-output/settings-excel-backup.png` and rendered owner views from a saved fictional workbook under `test-output/owner-backup-demo/`. Customer names, individual debt balances, peso formatting and stock statuses were checked against source records. Results are recorded in `test-output/e2e-result.json`. These checks cover the current source build; the previously generated installers below have not been rebuilt for this change.
+- Added ExcelJS 4.4.0 for offline workbook support, with a scoped UUID override to 11.1.1 addressing the advisory reported during installation. A follow-up registry audit was unavailable because the npm registry DNS lookup failed; no clean audit result is claimed for this change.
+
 Date: November 9, 2026. App version: 1.3.1. Host: Windows 11 x64 (build 22621). Development Node.js: 24.21.0. App runtime: Electron 45.2.3; better-sqlite3 13.0.3. Dependency versions are recorded in `package-lock.json`.
 
 ## Version 1.3.1 upgrade check

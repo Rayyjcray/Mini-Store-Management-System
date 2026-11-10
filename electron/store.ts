@@ -1,8 +1,18 @@
 import Database from 'better-sqlite3'
 import { randomUUID } from 'node:crypto'
-import { dirname, join, resolve } from 'node:path'
-import { mkdirSync, renameSync, existsSync, unlinkSync, statSync } from 'node:fs'
+import { dirname, extname, join, resolve } from 'node:path'
+import {
+  mkdirSync,
+  renameSync,
+  existsSync,
+  unlinkSync,
+  statSync,
+  readFileSync,
+  writeFileSync,
+} from 'node:fs'
 import { ZodError } from 'zod'
+import { exportCSVBackup, importCSVBackup } from './csv-backup'
+import { exportWorkbookBackup, readWorkbookBackup } from './workbook-backup'
 import type {
   Customer,
   CustomerAccount,
@@ -592,11 +602,38 @@ export class Store {
   }
   async backup(destination: string) {
     if (sameFile(destination, this.path)) throw new Error('Choose a different backup location.')
+    if (extname(destination).toLowerCase() === '.xlsx') {
+      await exportWorkbookBackup(this.db, destination)
+      return
+    }
+    if (extname(destination).toLowerCase() === '.csv') {
+      writeFileSync(destination, exportCSVBackup(this.db), 'utf8')
+      return
+    }
     await this.db.backup(destination)
   }
   async restore(source: string) {
     if (sameFile(source, this.path))
       throw new Error('Choose a backup file, not the active database.')
+    if (['.csv', '.xlsx'].includes(extname(source).toLowerCase())) {
+      const stagedPath = join(dirname(this.path), `csv-restore-${randomUUID()}.db`)
+      let staged: Store | undefined
+      try {
+        staged = new Store(stagedPath)
+        const contents =
+          extname(source).toLowerCase() === '.xlsx'
+            ? await readWorkbookBackup(source)
+            : readFileSync(source, 'utf8')
+        importCSVBackup(staged.db, contents)
+        staged.close()
+        await this.restore(stagedPath)
+      } finally {
+        staged?.close()
+        for (const file of [stagedPath, `${stagedPath}-wal`, `${stagedPath}-shm`])
+          if (existsSync(file)) unlinkSync(file)
+      }
+      return
+    }
     const imported = new Database(source, { readonly: true, fileMustExist: true })
     const temporary = join(dirname(this.path), `restore-${randomUUID()}.db`)
     try {

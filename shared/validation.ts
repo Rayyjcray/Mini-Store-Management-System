@@ -81,3 +81,4 @@ export const settingsSchema = z.object({
 })
 export const voidSchema = z.object({ id, reason: text(500).min(3) })
 export const idSchema = id
+export const backupFormatSchema = z.enum(['db', 'csv', 'xlsx']).default('db')

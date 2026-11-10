@@ -9,6 +9,7 @@ export const categories = [
   'Dorm essentials',
 ] as const
 export type Category = (typeof categories)[number]
+export type BackupFormat = 'db' | 'csv' | 'xlsx'
 export interface Product {
   id: number
   name: string
@@ -201,7 +202,7 @@ export interface StoreAPI {
   report(input: { from: string; to: string }): Promise<Result<Report>>
   saveSettings(input: Settings): Promise<Result<void>>
   seedCatalog(): Promise<Result<void>>
-  backup(): Promise<Result<string | null>>
+  backup(format?: BackupFormat): Promise<Result<string | null>>
   restore(): Promise<Result<boolean>>
   exportReport(input: { from: string; to: string }): Promise<Result<string | null>>
   printReceipt(id: number): Promise<Result<void>>
