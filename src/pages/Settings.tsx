@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { DatabaseBackup, Download, Upload, PackagePlus, ShieldCheck, HardDrive } from 'lucide-react'
 import { useStore } from '../context'
-import { DataForm, Field, Input, PageTitle } from '../components/common'
+import { DataForm, Field, Input, PageTitle, PasswordInput } from '../components/common'
 import { Button } from '../components/ui/button'
 import { Modal } from '../components/ui/dialog'
 import { useOwner } from '../components/AuthGate'
@@ -204,8 +204,7 @@ export default function Settings({ onRestore }: { onRestore: () => void }) {
           >
             <div className="space-y-5">
               <Field label="Current password">
-                <Input
-                  type="password"
+                <PasswordInput
                   name="currentPassword"
                   required
                   maxLength={128}
@@ -214,8 +213,7 @@ export default function Settings({ onRestore }: { onRestore: () => void }) {
                 />
               </Field>
               <Field label="New password" hint="Use at least 12 characters.">
-                <Input
-                  type="password"
+                <PasswordInput
                   name="password"
                   required
                   minLength={12}
@@ -224,8 +222,7 @@ export default function Settings({ onRestore }: { onRestore: () => void }) {
                 />
               </Field>
               <Field label="Confirm new password">
-                <Input
-                  type="password"
+                <PasswordInput
                   name="confirmPassword"
                   required
                   minLength={12}
