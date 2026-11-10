@@ -1,5 +1,17 @@
 # Validation record
 
+## Version 1.4.0 release and installed upgrade — November 10, 2026
+
+- Built from `main` at `2c4e499`, with release metadata updated to 1.4.0 after verifying that `origin/main` matched the checkout.
+- Strict TypeScript checking, production builds and Windows x64 NSIS packaging passed. The installer and packaged executable report version 1.4.0. The application identity, installed data directory, database schemas and `deleteAppDataOnUninstall: false` setting remain unchanged.
+- All **54 integration tests passed**. The complete owner/staff desktop workflow also passed against the packaged 1.4.0 executable, including SQLite/CSV/Excel backup and restore, password changes, checkout, repayment, stock, restart persistence, role restrictions and recovery, with zero renderer errors. Result: `test-output/packaged-e2e-result.json`.
+- Opened a consistent copy of an existing packaged 1.3.1 test profile first with 1.3.1, then with 1.4.0. Existing credentials worked and saved products, sales and customers remained accessible. Compared row counts and SHA-256 digests for all business tables, account credentials and shop membership; all records and schema versions were unchanged. Expected authentication activity entries were excluded from this isolated sign-in comparison. Result: `test-output/release-1.4.0/upgrade-result.json`.
+- Verified the login eye icon and all three Settings password controls on the packaged executable. Each field switches independently between hidden and visible text, retains its value, does not submit the form and returns to hidden after closing and reopening the password dialog.
+- Before updating the real installation, created consistent SQLite backups of both installed databases and the existing automatic backup under `test-output/release-1.4.0/database-backup-20261110-105101/`. Verified integrity, foreign keys, schema hashes and every table's row count and row digest.
+- Ran `DormStore-Setup-1.4.0-x64.exe` over the existing per-user 1.3.1 installation successfully. The installed executable reports 1.4.0 and its `app.asar` hash matches the tested package. A startup check confirmed the original `%APPDATA%/DormStore` profile and existing accounts without signing in or writing store records. Result: `test-output/release-1.4.0/installed-startup-result.json`.
+- After installation and startup, compared every row and schema in both real installed databases and the existing automatic backup against the pre-update baseline. **All were unchanged.** Result: `test-output/release-1.4.0/installed-data-result.json`.
+- Installer: `release/DormStore-Setup-1.4.0-x64.exe` (140,427,420 bytes). SHA-256: `beec9bd8bad91a4033a20c798b3de7d0534abe4bc22b8924ecab9f1a94611b2c`; also recorded in the adjacent `.sha256` file. Previous versioned installers remain available. The installer is unsigned, consistent with earlier local releases.
+
 ## Owner-readable backups and restore check — November 10, 2026
 
 - Source build, strict TypeScript checking and formatting passed.
